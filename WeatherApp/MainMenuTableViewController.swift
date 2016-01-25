@@ -11,7 +11,7 @@ import UIKit
 class MainMenuTableViewController: UITableViewController {
     var selectedIndex = 0
     
-    let cityArray = ["Charlotte", "Boston", "Seattle"]
+    let cityArray = ["Charlotte", "Boston", "Seattle", "dfghjgfdh"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,7 +21,7 @@ class MainMenuTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return cityArray.count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
