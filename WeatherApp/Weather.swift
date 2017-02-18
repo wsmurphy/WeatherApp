@@ -9,22 +9,24 @@
 import UIKit
 
 class Weather: NSObject {
-    var temperature: Double
-    var conditions: String
+    var temperature: Double = 0
+    var conditions: String = "Unknown"
+    var cityName: String = "Unknown"
 
-    override init() {
-        temperature = 0
-        conditions = "Unknown"
-    }
+    init(dictionary: [AnyHashable: Any]) {
+        if let name = dictionary["name"] as? String {
+            cityName = name
+        } else {
+            cityName = "Unknown"
+        }
 
-    init(dictionary: [NSObject : AnyObject]) {
-        if let mainDetails = dictionary["main"] as? [NSObject : AnyObject], temp = mainDetails["temp"] as? Double {
+        if let mainDetails = dictionary["main"] as? [AnyHashable: Any], let temp = mainDetails["temp"] as? Double {
             temperature = temp
         } else {
             temperature = 0
         }
 
-        if let weather = dictionary["weather"]![0] as? [NSObject : AnyObject], description = weather["description"] as? String {
+        if let weather = dictionary["weather"] as? [[AnyHashable: Any]], let description = weather[0]["description"] as? String {
                 conditions = description
         } else {
             conditions = "Unknown"
