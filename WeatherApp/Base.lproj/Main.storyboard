@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="WDu-1A-3O9">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1108" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="WDu-1A-3O9">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Main Menu-->
         <scene sceneID="Huw-iL-ge9">
             <objects>
-                <tableViewController title="Main Menu" id="LMW-u4-Pbi" customClass="MainMenuTableViewController" customModule="InterviewProject" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="Main Menu" id="LMW-u4-Pbi" customClass="MainMenuTableViewController" customModule="WeatherApp" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="5Fo-dt-r60">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="MenuCell" id="vZV-gg-hf9">
-                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vZV-gg-hf9" id="C0I-Bi-Cdm">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -40,27 +44,27 @@
         <!--Weather View Controller-->
         <scene sceneID="EZE-5r-0Bt">
             <objects>
-                <viewController id="dDT-kx-aDV" customClass="WeatherViewController" customModule="InterviewProject" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WeatherViewController" id="dDT-kx-aDV" customClass="WeatherViewController" customModule="WeatherApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="OMh-Uv-kIp"/>
                         <viewControllerLayoutGuide type="bottom" id="TTP-QT-LgP"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="fAw-gH-9Q8">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Conditions Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pr5-z9-M7F">
-                                <rect key="frame" x="150" y="289" width="300" height="21"/>
+                                <rect key="frame" x="37.5" y="289" width="300" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="4KT-XI-Aca"/>
                                     <constraint firstAttribute="height" constant="21" id="6uO-t1-6ms"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="99" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XMi-HU-mkq">
-                                <rect key="frame" x="200" y="140" width="200" height="120"/>
+                                <rect key="frame" x="87.5" y="140" width="200" height="120"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="200" id="Vpi-z0-k93"/>
                                     <constraint firstAttribute="height" constant="120" id="bqe-eA-hri"/>
@@ -70,7 +74,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="pr5-z9-M7F" firstAttribute="centerX" secondItem="fAw-gH-9Q8" secondAttribute="centerX" id="4ZN-dm-TON"/>
                             <constraint firstItem="pr5-z9-M7F" firstAttribute="top" secondItem="XMi-HU-mkq" secondAttribute="bottom" constant="29" id="4a4-rQ-wSl"/>
@@ -106,5 +110,5 @@
             <point key="canvasLocation" x="1785" y="1012"/>
         </scene>
     </scenes>
-    <color key="tintColor" red="0.38013949881502074" green="0.78955571338383834" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+    <color key="tintColor" red="0.38013949881502074" green="0.78955571338383834" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
 </document>

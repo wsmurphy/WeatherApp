@@ -4,6 +4,11 @@ use_frameworks!
 
 target 'WeatherApp' do
    pod 'Alamofire'
-   pod 'Quick'
-   pod 'Nimble'
+
+   target 'WeatherAppTests' do
+      inherit! :search_paths
+      pod 'Quick'
+      pod 'Nimble'
+   end
+  
 end

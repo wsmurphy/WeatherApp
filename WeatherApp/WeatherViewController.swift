@@ -17,6 +17,10 @@ class WeatherViewController: UIViewController {
     @IBOutlet weak var temperatureLabel: UILabel!
     @IBOutlet weak var conditionsLabel: UILabel!
 
+    var weather: Weather?
+
+    var weatherConditionsLoaded = false
+
     var cityName: String? {
         didSet {
             if let cityName = cityName {
@@ -32,6 +36,8 @@ class WeatherViewController: UIViewController {
         Alamofire.request(weatherAPIURL, method: .get, parameters: parameterDictionary)
             .validate(contentType: ["application/json"])
             .responseJSON { response in
+                self.weatherConditionsLoaded = true
+
                 switch response.result {
                 case .success(let JSON):
 
@@ -42,11 +48,13 @@ class WeatherViewController: UIViewController {
 
                     //Check for successful response
                     if let returnCode = jsonResponse["cod"] as? Int, returnCode == 200 {
-                        let weather = Weather(dictionary: jsonResponse)
+                        self.weather = Weather(dictionary: jsonResponse)
 
-                        self.conditionsLabel.text = weather.conditions
-                        self.temperatureLabel.text = "\(Int(weather.temperature))°"
-                        self.navigationItem.title = weather.cityName
+                        if let weather = self.weather {
+                            self.conditionsLabel.text = weather.conditions
+                            self.temperatureLabel.text = "\(Int(weather.temperature))°"
+                            self.navigationItem.title = weather.cityName
+                        }
                     } else {
                         self.presentError()
                     }
