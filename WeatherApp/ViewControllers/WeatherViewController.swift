@@ -81,7 +81,7 @@ class WeatherViewController: UIViewController {
     }
 
     func loadWeatherForecast() {
-        let parameterDictionary = ["appid" : weatherAPIKey, "zip" : zip ?? "" + ",US", "units": unitIdentifier]
+        let parameterDictionary = ["appid": weatherAPIKey, "zip": zip ?? "" + ",US", "units": unitIdentifier]
 
         let url = baseAPIURL + "/" + forecastAPIPart
 
@@ -114,7 +114,7 @@ class WeatherViewController: UIViewController {
     func presentError() {
         //Present error and head back to menu after user response
         let alertController = UIAlertController(title: "Error", message: "Error getting weather. Please try again", preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "OK", style: .default) { action in
+        alertController.addAction(UIAlertAction(title: "OK", style: .default) { _ in
             self.navigationController?.popViewController(animated: true)
             })
         present(alertController, animated: true, completion: nil)
