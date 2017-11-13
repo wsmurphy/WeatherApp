@@ -1,5 +1,5 @@
 //
-//  Weather.swift
+//  WeatherConditions.swift
 //  WeatherApp
 //
 //  Created by Murphy, Stephen - William S on 1/25/16.
@@ -8,12 +8,19 @@
 
 import UIKit
 
-class Weather: NSObject {
+class WeatherConditions: NSObject {
     var temperature: Double = 0
     var conditions: String = "Unknown"
     var cityName: String = "Unknown"
+    var conditionCode: Int = 0
+    var date: Date?
 
     init(dictionary: [AnyHashable: Any]) {
+
+        if let rawDate = dictionary["dt"] as? Double {
+            date = Date(timeIntervalSince1970: rawDate)
+        }
+
         if let name = dictionary["name"] as? String {
             cityName = name
         } else {
@@ -26,11 +33,16 @@ class Weather: NSObject {
             temperature = 0
         }
 
-        if let weather = dictionary["weather"] as? [[AnyHashable: Any]], let description = weather[0]["description"] as? String {
+        if let weather = dictionary["weather"] as? [[AnyHashable: Any]] {
+            if let description = weather[0]["main"] as? String {
                 conditions = description
+            }
+
+            if let code = weather[0]["id"] as? Int {
+                conditionCode = code
+            }
         } else {
             conditions = "Unknown"
         }
     }
-
 }

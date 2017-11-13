@@ -34,7 +34,7 @@ class WeatherViewControllerSpec: QuickSpec {
 
                     expect(weatherVC.weatherConditionsLoaded).toEventually(beTrue(), timeout: 5.0, pollInterval: 1.0, description: "Loaded conditions")
 
-                    expect(weatherVC.weather).toEventually(beAnInstanceOf(Weather.self), timeout: 5.0, pollInterval: 1.0, description: "Weather object")
+                    expect(weatherVC.weather).toEventually(beAnInstanceOf(WeatherConditions.self), timeout: 5.0, pollInterval: 1.0, description: "Weather object")
 
                     expect(weatherVC.weather?.cityName).toEventually(match(cityName), timeout: 5.0, pollInterval: 1.0, description: "City Name")
                 }
@@ -46,7 +46,7 @@ class WeatherViewControllerSpec: QuickSpec {
 
                     expect(weatherVC.weatherConditionsLoaded).toEventually(beTrue(), timeout: 5.0, pollInterval: 1.0, description: "Loaded conditions")
 
-                    expect(weatherVC.weather).toEventually(beAnInstanceOf(Weather.self), timeout: 5.0, pollInterval: 1.0, description: "Weather object")
+                    expect(weatherVC.weather).toEventually(beAnInstanceOf(WeatherConditions.self), timeout: 5.0, pollInterval: 1.0, description: "Weather object")
 
                     expect(weatherVC.weather?.cityName).toEventually(match(cityName), timeout: 5.0, pollInterval: 1.0, description: "City Name")
                 }

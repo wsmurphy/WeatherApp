@@ -11,7 +11,7 @@ import UIKit
 class MainMenuTableViewController: UITableViewController {
     var selectedIndex = 0
     
-    let cityArray = ["Charlotte", "Boston", "Seattle", "dfghjgfdh"]
+    let cityArray = ["28227", "48163", "46759", "94022", "10001", "11109", "89049", "79936"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,7 +40,7 @@ class MainMenuTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "WeatherSegue" {
             if let destinationViewController = segue.destination as? WeatherViewController {
-                destinationViewController.cityName = cityArray[selectedIndex]
+                destinationViewController.zip = cityArray[selectedIndex]
             }
         }
     }
