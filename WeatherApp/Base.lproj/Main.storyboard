@@ -1,11 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="15G1108" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="WDu-1A-3O9">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G1036" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="WDu-1A-3O9">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -54,42 +55,79 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Conditions Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pr5-z9-M7F">
-                                <rect key="frame" x="37.5" y="289" width="300" height="21"/>
+                                <rect key="frame" x="38" y="229" width="300" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="300" id="4KT-XI-Aca"/>
                                     <constraint firstAttribute="height" constant="21" id="6uO-t1-6ms"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="99" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XMi-HU-mkq">
-                                <rect key="frame" x="87.5" y="140" width="200" height="120"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="99.99 °F" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XMi-HU-mkq">
+                                <rect key="frame" x="112.5" y="140" width="150" height="60"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="Vpi-z0-k93"/>
-                                    <constraint firstAttribute="height" constant="120" id="bqe-eA-hri"/>
+                                    <constraint firstAttribute="width" constant="150" id="Vpi-z0-k93"/>
+                                    <constraint firstAttribute="height" constant="60" id="bqe-eA-hri"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="36"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mUB-jk-k5t">
+                                <rect key="frame" x="131" y="119" width="112" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Upcoming Conditions" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3kP-tn-fOa">
+                                <rect key="frame" x="105" y="278" width="166" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icons8clouds" translatesAutoresizingMaskIntoConstraints="NO" id="y4U-Fj-th7">
+                                <rect key="frame" x="52.5" y="140" width="60" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="60" id="Vlx-Us-lEv"/>
+                                </constraints>
+                            </imageView>
+                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IQ0-Mr-Fwf">
+                                <rect key="frame" x="24" y="307" width="327" height="160"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="160" id="BVi-xn-Qw6"/>
+                                </constraints>
+                            </stackView>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="pr5-z9-M7F" firstAttribute="centerX" secondItem="fAw-gH-9Q8" secondAttribute="centerX" id="4ZN-dm-TON"/>
                             <constraint firstItem="pr5-z9-M7F" firstAttribute="top" secondItem="XMi-HU-mkq" secondAttribute="bottom" constant="29" id="4a4-rQ-wSl"/>
                             <constraint firstItem="XMi-HU-mkq" firstAttribute="top" secondItem="OMh-Uv-kIp" secondAttribute="bottom" constant="76" id="BhS-oW-lY9"/>
+                            <constraint firstItem="3kP-tn-fOa" firstAttribute="centerX" secondItem="fAw-gH-9Q8" secondAttribute="centerX" id="KA0-ab-jrn"/>
+                            <constraint firstItem="y4U-Fj-th7" firstAttribute="top" secondItem="XMi-HU-mkq" secondAttribute="top" id="Lmw-c4-BuF"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="IQ0-Mr-Fwf" secondAttribute="trailing" constant="8" id="THy-cl-e7h"/>
+                            <constraint firstItem="mUB-jk-k5t" firstAttribute="centerX" secondItem="fAw-gH-9Q8" secondAttribute="centerX" id="e5S-Lt-bP8"/>
+                            <constraint firstItem="y4U-Fj-th7" firstAttribute="centerY" secondItem="XMi-HU-mkq" secondAttribute="centerY" id="fVJ-eN-UEB"/>
+                            <constraint firstItem="XMi-HU-mkq" firstAttribute="leading" secondItem="y4U-Fj-th7" secondAttribute="trailing" id="jI8-KW-jPQ"/>
+                            <constraint firstItem="XMi-HU-mkq" firstAttribute="top" secondItem="mUB-jk-k5t" secondAttribute="bottom" id="kCe-WI-wZF"/>
+                            <constraint firstItem="IQ0-Mr-Fwf" firstAttribute="top" secondItem="3kP-tn-fOa" secondAttribute="bottom" constant="8" id="ovI-YD-7LV"/>
+                            <constraint firstItem="IQ0-Mr-Fwf" firstAttribute="leading" secondItem="fAw-gH-9Q8" secondAttribute="leadingMargin" constant="8" id="ovw-fH-Car"/>
+                            <constraint firstItem="3kP-tn-fOa" firstAttribute="top" secondItem="pr5-z9-M7F" secondAttribute="bottom" constant="28" id="wvh-Wc-GuO"/>
                             <constraint firstItem="XMi-HU-mkq" firstAttribute="centerX" secondItem="fAw-gH-9Q8" secondAttribute="centerX" id="xHR-ae-YUR"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="conditionsIcon" destination="y4U-Fj-th7" id="2dD-G3-Vya"/>
                         <outlet property="conditionsLabel" destination="pr5-z9-M7F" id="YL2-lD-DMQ"/>
+                        <outlet property="forecastStackView" destination="IQ0-Mr-Fwf" id="i2C-MU-gQX"/>
+                        <outlet property="locationLabel" destination="mUB-jk-k5t" id="DNI-Hh-jyA"/>
                         <outlet property="temperatureLabel" destination="XMi-HU-mkq" id="nYQ-CT-2z1"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Sjc-dv-MZq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3232" y="1012"/>
+            <point key="canvasLocation" x="3231.1999999999998" y="1011.544227886057"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="mMD-Ob-Pir">
@@ -109,6 +147,26 @@
             </objects>
             <point key="canvasLocation" x="1785" y="1012"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="e26-fC-W0n">
+            <objects>
+                <viewController id="MeE-1K-4WU" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="uwB-QW-bvv"/>
+                        <viewControllerLayoutGuide type="bottom" id="JvX-eC-JYb"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="YoV-nR-ji2">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Eoi-xE-ne5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
     </scenes>
+    <resources>
+        <image name="icons8clouds" width="48" height="48"/>
+    </resources>
     <color key="tintColor" red="0.38013949881502074" green="0.78955571338383834" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
 </document>
