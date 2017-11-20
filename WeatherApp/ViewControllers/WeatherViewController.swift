@@ -7,36 +7,22 @@
 //
 
 import UIKit
-import Alamofire
+import CoreLocation
 
 class WeatherViewController: UIViewController {
-    fileprivate let weatherAPIKey = "b4608d4fcb4accac0a8cc2ea6949eeb5"
-    fileprivate let baseAPIURL = "http://api.openweathermap.org/data/2.5/"
-    fileprivate let weatherAPIPart = "weather"
-    fileprivate let forecastAPIPart = "forecast"
-    fileprivate let unitIdentifier = "imperial"
-
     @IBOutlet weak var temperatureLabel: UILabel!
     @IBOutlet weak var conditionsLabel: UILabel!
     @IBOutlet weak var conditionsIcon: UIImageView!
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var forecastStackView: UIStackView!
-
-    var weather: WeatherConditions?
-    var forecast: WeatherForecast?
-
-    var weatherConditionsLoaded = false
+    @IBOutlet weak var infoButton: UIButton!
+    @IBOutlet weak var changeLocationButton: UIButton!
+    @IBOutlet weak var unitsSwitch: UISegmentedControl!
 
     var dateFormatter: DateFormatter
 
-    var zip: String? {
-        didSet {
-            if zip != nil {
-                loadWeatherConditions()
-                loadWeatherForecast()
-            }
-        }
-    }
+    let locationManager = CLLocationManager()
+    let geocoder = CLGeocoder()
 
     required init?(coder aDecoder: NSCoder) {
         dateFormatter = DateFormatter()
@@ -45,70 +31,23 @@ class WeatherViewController: UIViewController {
         super.init(coder: aDecoder)
     }
 
-    func loadWeatherConditions() {
-        let parameterDictionary = ["appid": weatherAPIKey, "zip": zip ?? "" + ",US", "units": unitIdentifier]
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
-        let url = baseAPIURL + "/" + weatherAPIPart
+        // Ask for Authorisation from the User.
+        self.locationManager.requestAlwaysAuthorization()
 
-        //Get the weather conditions
-        Alamofire.request(url, method: .get, parameters: parameterDictionary)
-            .validate(contentType: ["application/json"])
-            .responseJSON { response in
-                self.weatherConditionsLoaded = true
+        // For use in foreground
+        self.locationManager.requestWhenInUseAuthorization()
 
-                switch response.result {
-                case .success(let JSON):
-
-                    guard let jsonResponse = JSON as? [AnyHashable: Any] else {
-                        print("Error parsing JSON")
-                        return
-                    }
-
-                    //Check for successful response
-                    if let returnCode = jsonResponse["cod"] as? Int, returnCode == 200 {
-                        self.weather = WeatherConditions(dictionary: jsonResponse)
-                        self.updateConditions()
-                    } else {
-                        self.presentError()
-                    }
-
-                case .failure(let error):
-                    print("Request failed with error: \(error)")
-
-                    self.presentError()
-                }
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locationManager.requestLocation()
         }
-    }
 
-    func loadWeatherForecast() {
-        let parameterDictionary = ["appid": weatherAPIKey, "zip": zip ?? "" + ",US", "units": unitIdentifier]
-
-        let url = baseAPIURL + "/" + forecastAPIPart
-
-        //Get the weather conditions
-        Alamofire.request(url, method: .get, parameters: parameterDictionary)
-            .validate(contentType: ["application/json"])
-            .responseJSON { response in
-                self.weatherConditionsLoaded = true
-
-                switch response.result {
-                case .success(let JSON):
-
-                    guard let jsonResponse = JSON as? [AnyHashable: Any] else {
-                        print("Error parsing JSON")
-                        return
-                    }
-
-                    //Check for successful response
-                    self.forecast = WeatherForecast(dictionary: jsonResponse)
-                    self.updateForecast()
-
-                case .failure(let error):
-                    print("Request failed with error: \(error)")
-                    
-                    self.presentError()
-                }
-        }
+        NotificationCenter.default.addObserver(self, selector: #selector(WeatherViewController.updateConditions), name: Notification.Name("WeatherConditionsChanged"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(WeatherViewController.updateForecast), name: Notification.Name("WeatherForecastChanged"), object: nil)
     }
 
     func presentError() {
@@ -120,10 +59,10 @@ class WeatherViewController: UIViewController {
         present(alertController, animated: true, completion: nil)
     }
 
-    func updateConditions() {
-        if let weather = weather {
+    @objc func updateConditions() {
+        if let weather = WeatherManager.sharedInstance.weatherConditions {
             conditionsLabel.text = weather.conditions
-            temperatureLabel.text = "\(weather.temperature)° F"
+            temperatureLabel.text = "\(weather.temperature)\(WeatherManager.sharedInstance.units.displayString)"
             locationLabel.text = weather.cityName
 
             updateConditionsIcon()
@@ -132,7 +71,7 @@ class WeatherViewController: UIViewController {
 
     func updateConditionsIcon() {
         conditionsIcon.isHidden = false
-        switch weather?.conditionCode ?? 0 {
+        switch WeatherManager.sharedInstance.weatherConditions?.conditionCode ?? 0 {
         case 200...299:
             conditionsIcon.image = #imageLiteral(resourceName: "icons8storm")
         case 300...599:
@@ -153,17 +92,22 @@ class WeatherViewController: UIViewController {
         }
     }
 
-    func updateForecast() {
-        guard let forecast = forecast else {
+    @objc func updateForecast() {
+        guard let forecast = WeatherManager.sharedInstance.weatherForecast else {
             return
         }
 
-        let count = forecast.forecast.count > 3 ? 3 : forecast.forecast.count
+        //Clear old views
+        for view in forecastStackView.arrangedSubviews {
+            forecastStackView.removeArrangedSubview(view)
+            view.removeFromSuperview()
+        }
 
+        let count = forecast.forecast.count > 3 ? 3 : forecast.forecast.count
         for i in 0..<count {
             if let forecastView = ForecastView.instantiateFromNib() {
                 forecastView.conditionsLabel.text = forecast.forecast[i].conditions
-                forecastView.tempLabel.text = "\(forecast.forecast[i].temperature)° F"
+                forecastView.tempLabel.text = "\(forecast.forecast[i].temperature)\(WeatherManager.sharedInstance.units.displayString)"
 
                 if let date = forecast.forecast[i].date {
                     forecastView.timeLabel.text = dateFormatter.string(from: date)
@@ -176,4 +120,41 @@ class WeatherViewController: UIViewController {
         forecastStackView.distribution = .fillEqually
     }
 
+    @IBAction func infoButtonTapped(_ sender: Any) {
+        let controller = UIAlertController(title: "About", message: "Weather icons courtesy of Icons8 under CC-BY ND 3.0 license.\nhttps://icons8.com/", preferredStyle: .alert)
+            controller.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        show(controller, sender: nil)
+    }
+
+    @IBAction func changeLocationTapped(_ sender: Any) {
+        //TODO: Placeholder
+        locationManager.requestLocation()
+    }
+
+    @IBAction func unitsChanged(_ sender: Any) {
+        if unitsSwitch.selectedSegmentIndex == 0 {
+            WeatherManager.sharedInstance.units = .fahrenheit
+        } else {
+            WeatherManager.sharedInstance.units = .celcius
+        }
+    }
+
+}
+
+extension WeatherViewController: CLLocationManagerDelegate {
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        guard let location = locations.first else {
+            return
+        }
+        geocoder.reverseGeocodeLocation(location) { (placemark, _) in
+            if let placemark = placemark?.last,
+                let postalCode = placemark.postalCode {
+                WeatherManager.sharedInstance.zip = postalCode
+            }
+        }
+    }
+
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("Error getting location: \(error)")
+    }
 }
