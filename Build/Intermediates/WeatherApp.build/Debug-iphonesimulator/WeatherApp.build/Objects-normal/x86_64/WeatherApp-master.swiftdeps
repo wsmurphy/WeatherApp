@@ -1,0 +1,6 @@
+version: "Apple Swift version 5.0.1 (swiftlang-1001.0.82.4 clang-1001.0.46.5)"
+options: "b0c37db79944a9b224487133eeb07383"
+build_time: [1563460630, 458988000]
+inputs:
+  "/Users/wsmurphy/git_workspace/WeatherApp/WeatherApp/ViewController.swift": [1563460318, 785098204]
+  "/Users/wsmurphy/git_workspace/WeatherApp/WeatherApp/AppDelegate.swift": [1563460318, 777530787]

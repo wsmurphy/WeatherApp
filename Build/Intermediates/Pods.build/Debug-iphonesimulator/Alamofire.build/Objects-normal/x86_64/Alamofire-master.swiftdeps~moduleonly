@@ -1,0 +1,21 @@
+version: "Apple Swift version 5.0.1 (swiftlang-1001.0.82.4 clang-1001.0.46.5)"
+options: "135b0bca607ff0aa5cabf673ea56aa0c"
+build_time: [1563460626, 203627000]
+inputs:
+  "/Users/wsmurphy/git_workspace/WeatherApp/Pods/Alamofire/Source/AFError.swift": [1563460564, 333001493]
+  "/Users/wsmurphy/git_workspace/WeatherApp/Pods/Alamofire/Source/Alamofire.swift": [1563460564, 334139205]
+  "/Users/wsmurphy/git_workspace/WeatherApp/Pods/Alamofire/Source/DispatchQueue+Alamofire.swift": [1563460564, 332238613]
+  "/Users/wsmurphy/git_workspace/WeatherApp/Pods/Alamofire/Source/MultipartFormData.swift": [1563460564, 331405792]
+  "/Users/wsmurphy/git_workspace/WeatherApp/Pods/Alamofire/Source/NetworkReachabilityManager.swift": [1563460564, 331693415]
+  "/Users/wsmurphy/git_workspace/WeatherApp/Pods/Alamofire/Source/Notifications.swift": [1563460564, 333507433]
+  "/Users/wsmurphy/git_workspace/WeatherApp/Pods/Alamofire/Source/ParameterEncoding.swift": [1563460564, 332707194]
+  "/Users/wsmurphy/git_workspace/WeatherApp/Pods/Alamofire/Source/Request.swift": [1563460564, 334474931]
+  "/Users/wsmurphy/git_workspace/WeatherApp/Pods/Alamofire/Source/Response.swift": [1563460564, 333741305]
+  "/Users/wsmurphy/git_workspace/WeatherApp/Pods/Alamofire/Source/ResponseSerialization.swift": [1563460564, 335134957]
+  "/Users/wsmurphy/git_workspace/WeatherApp/Pods/Alamofire/Source/Result.swift": [1563460564, 332469058]
+  "/Users/wsmurphy/git_workspace/WeatherApp/Pods/Alamofire/Source/ServerTrustPolicy.swift": [1563460564, 335398173]
+  "/Users/wsmurphy/git_workspace/WeatherApp/Pods/Alamofire/Source/SessionDelegate.swift": [1563460564, 335666084]
+  "/Users/wsmurphy/git_workspace/WeatherApp/Pods/Alamofire/Source/SessionManager.swift": [1563460564, 334767652]
+  "/Users/wsmurphy/git_workspace/WeatherApp/Pods/Alamofire/Source/TaskDelegate.swift": [1563460564, 331104349]
+  "/Users/wsmurphy/git_workspace/WeatherApp/Pods/Alamofire/Source/Timeline.swift": [1563460564, 331996458]
+  "/Users/wsmurphy/git_workspace/WeatherApp/Pods/Alamofire/Source/Validation.swift": [1563460564, 333270123]
