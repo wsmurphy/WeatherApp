@@ -1,6 +1,6 @@
 version: "Apple Swift version 5.0.1 (swiftlang-1001.0.82.4 clang-1001.0.46.5)"
 options: "135b0bca607ff0aa5cabf673ea56aa0c"
-build_time: [1563460626, 203627000]
+build_time: [1563460809, 71582000]
 inputs:
   "/Users/wsmurphy/git_workspace/WeatherApp/Pods/Alamofire/Source/AFError.swift": [1563460564, 333001493]
   "/Users/wsmurphy/git_workspace/WeatherApp/Pods/Alamofire/Source/Alamofire.swift": [1563460564, 334139205]

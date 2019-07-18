@@ -199,15 +199,22 @@ SWIFT_CLASS("_TtC10WeatherApp11AppDelegate")
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
 @end
 
+@class UILabel;
 @class NSBundle;
 @class NSCoder;
 
-SWIFT_CLASS("_TtC10WeatherApp14ViewController")
-@interface ViewController : UIViewController
+SWIFT_CLASS("_TtC10WeatherApp21WeatherViewController")
+@interface WeatherViewController : UIViewController
+@property (nonatomic, weak) IBOutlet UILabel * _Null_unspecified currentTempLabel;
+@property (nonatomic, weak) IBOutlet UILabel * _Null_unspecified currentConditionsLabel;
+@property (nonatomic, weak) IBOutlet UILabel * _Null_unspecified currentCityLabel;
 - (void)viewDidLoad;
+- (void)viewWillAppear:(BOOL)animated;
 - (nonnull instancetype)initWithNibName:(NSString * _Nullable)nibNameOrNil bundle:(NSBundle * _Nullable)nibBundleOrNil OBJC_DESIGNATED_INITIALIZER;
 - (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
 @end
+
+
 
 #if __has_attribute(external_source_symbol)
 # pragma clang attribute pop
