@@ -13,7 +13,6 @@ class CurrentWeatherViewController: UIViewController {
     var viewModel = CurrentWeatherViewModel()
     @IBOutlet weak var currentTempLabel: UILabel!
     @IBOutlet weak var currentConditionsLabel: UILabel!
-    @IBOutlet weak var currentCityLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +28,8 @@ class CurrentWeatherViewController: UIViewController {
     func updateWeatherLabels() {
         currentTempLabel.text = viewModel.currentTempText
         currentConditionsLabel.text = viewModel.currentConditionsText
-        currentCityLabel.text = viewModel.currentCityText
+
+        navigationController?.navigationBar.topItem?.title = viewModel.currentCityText
     }
 
 
