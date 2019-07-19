@@ -39,7 +39,7 @@ class WeatherConnections {
                 switch response.result {
                 case .success(let JSON):
 
-                    guard let jsonResponse = JSON as? [AnyHashable: Any] else {
+                    guard let jsonResponse = JSON as? [String: Any] else {
                         print("Error parsing JSON")
                         completion(nil)
                         return
@@ -48,6 +48,38 @@ class WeatherConnections {
                     //Check for successful response
                     if let returnCode = jsonResponse["cod"] as? Int, returnCode == 200 {
                         completion(Weather(dictionary: jsonResponse))
+                    } else {
+                        completion(nil)
+                    }
+
+                case .failure(let error):
+                    print("Request failed with error: \(error)")
+                    completion(nil)
+                }
+        }
+    }
+
+    static func loadForecast(zip: String, units: Units = Units.fahrenheit, completion: @escaping (Forecast?) -> Void) {
+        //TODO: Correct this to the Forecast API call
+        let parameterDictionary = ["appid": weatherAPIKey, "zip": zip + ",US", "units": units.rawValue]
+        let url = "\(baseAPIURL)/forecast/daily"
+
+        //Get the weather conditions
+        Alamofire.request(url, method: .get, parameters: parameterDictionary)
+            .validate(contentType: ["application/json"])
+            .responseJSON { response in
+                switch response.result {
+                case .success(let JSON):
+
+                    guard let jsonResponse = JSON as? [String: Any] else {
+                        print("Error parsing JSON")
+                        completion(nil)
+                        return
+                    }
+
+                    //Check for successful response
+                    if let returnCode = jsonResponse["cod"] as? String, returnCode == "200" {
+                        completion(Forecast(dictionary: jsonResponse))
                     } else {
                         completion(nil)
                     }

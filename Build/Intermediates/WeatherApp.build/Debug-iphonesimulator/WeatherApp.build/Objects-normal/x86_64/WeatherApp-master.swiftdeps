@@ -1,9 +1,0 @@
-version: "Apple Swift version 5.0.1 (swiftlang-1001.0.82.4 clang-1001.0.46.5)"
-options: "b0c37db79944a9b224487133eeb07383"
-build_time: [1563465303, 143946000]
-inputs:
-  "/Users/wsmurphy/git_workspace/WeatherApp/WeatherApp/View/WeatherViewController.swift": [1563465284, 839766795]
-  "/Users/wsmurphy/git_workspace/WeatherApp/WeatherApp/ViewModel/WeatherViewModel.swift": [1563465174, 438499395]
-  "/Users/wsmurphy/git_workspace/WeatherApp/WeatherApp/Network/WeatherConnections.swift": [1563465289, 871105538]
-  "/Users/wsmurphy/git_workspace/WeatherApp/WeatherApp/Model/Weather.swift": [1563465302, 744171031]
-  "/Users/wsmurphy/git_workspace/WeatherApp/WeatherApp/AppDelegate.swift": [1563460318, 777530787]

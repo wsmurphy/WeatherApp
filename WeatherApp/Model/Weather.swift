@@ -15,8 +15,8 @@ class Weather {
     var conditionCode: Int = 0
     var date: Date?
 
-    init(dictionary: [AnyHashable: Any]) {
-
+    //Custom JSON parsing logic
+    init(dictionary: [String: Any]) {
         if let rawDate = dictionary["dt"] as? Double {
             date = Date(timeIntervalSince1970: rawDate)
         }
@@ -27,13 +27,13 @@ class Weather {
             cityName = "Unknown"
         }
 
-        if let mainDetails = dictionary["main"] as? [AnyHashable: Any], let temp = mainDetails["temp"] as? Double {
+        if let mainDetails = dictionary["main"] as? [String: Any], let temp = mainDetails["temp"] as? Double {
             temperature = temp
         } else {
             temperature = 0
         }
 
-        if let weather = dictionary["weather"] as? [[AnyHashable: Any]] {
+        if let weather = dictionary["weather"] as? [[String: Any]] {
             if let description = weather[0]["main"] as? String {
                 conditions = description
             }
@@ -44,5 +44,13 @@ class Weather {
         } else {
             conditions = "Unknown"
         }
+    }
+
+    init() {
+        temperature = 50
+        conditions = "Clear"
+        cityName = "Any Town"
+        conditionCode = 100
+        date = Date()
     }
 }
