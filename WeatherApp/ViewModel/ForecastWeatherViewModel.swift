@@ -40,12 +40,13 @@ class ForecastWeatherViewModel {
     }
 
     func configureCellForRow(row: Int, cell: ForecastWeatherTableViewCell) -> ForecastWeatherTableViewCell {
-        guard let weather = forecast?.list[row], let date = weather.date else {
+        guard let forecastDay = forecast?.list[row] else {
             return cell
         }
+        let date = Date(timeIntervalSince1970: forecastDay.dt)
         cell.dayLabel.text = formatter.string(from: date)
-        cell.highTempLabel.text = "\(weather.highTemp)"
-        cell.lowTempLabel.text = "\(weather.lowTemp)"
+        cell.highTempLabel.text = "\(forecastDay.temp.max)"
+        cell.lowTempLabel.text = "\(forecastDay.temp.min)"
 
         return cell
     }

@@ -38,6 +38,8 @@ struct Main: Codable {
     var sea_level: Double?
     var grnd_level: Double?
 }
+
+// TODO: Figure out if we'll get these in the response ever and bring them in as optional
 //
 //struct Rain: Codable {
 //    var oneHour: Double

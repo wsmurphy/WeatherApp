@@ -8,40 +8,19 @@
 
 import Foundation
 
-class Forecast {
-    var list: [ForecastDay] = []
-    
-    //Custom JSON parsing logic
-    init(dictionary: [String: Any]) {
-        if let weatherList = dictionary["list"] as? [[String: Any]] {
-            for item in weatherList {
-                let fd = ForecastDay(dictionary: item)
-                list.append(fd)
-            }
-        }
-    }
+struct ForecastDay: Codable {
+    var temp: Temp
+    var dt: Double
+    var pressure: Double
+    var humidity: Double
 }
 
+struct Temp: Codable {
+    var max: Double
+    var min: Double
+}
 
-class ForecastDay {
-    var highTemp: Double = 0
-    var lowTemp: Double = 0
-    var date: Date?
-    var pressure: Double?
-    var humidity: Double?
-
-    //Custom JSON parsing logic
-    init(dictionary: [String: Any]) {
-        if let rawDate = dictionary["dt"] as? Double {
-            date = Date(timeIntervalSince1970: rawDate)
-        }
-
-        if let tempArray = dictionary["temp"] as? [String: Any] {
-            highTemp = tempArray["max"] as? Double ?? 0.0
-            lowTemp = tempArray["min"] as? Double ?? 0.0
-        }
-
-        pressure = dictionary["pressure"] as? Double ?? 0
-        humidity = dictionary["humidity"] as? Double ?? 0
-    }
+struct Forecast: Codable {
+    var list: [ForecastDay]
+    var cod: String
 }

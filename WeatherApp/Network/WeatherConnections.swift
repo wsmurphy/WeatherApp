@@ -66,27 +66,25 @@ class WeatherConnections {
         //Get the weather conditions
         Alamofire.request(url, method: .get, parameters: parameterDictionary)
             .validate(contentType: ["application/json"])
-            .responseJSON { response in
+            .responseData(completionHandler: { response in
                 switch response.result {
-                case .success(let JSON):
+                case .success(let data):
+                    do {
+                        let forcast = try JSONDecoder().decode(Forecast.self, from: data)
 
-                    guard let jsonResponse = JSON as? [String: Any] else {
-                        print("Error parsing JSON")
+                        //Check for successful response
+                        if forcast.cod == "200" {
+                            completion(forcast)
+                        } else {
+                            completion(nil)
+                        }
+                    } catch {
                         completion(nil)
-                        return
                     }
-
-                    //Check for successful response
-                    if let returnCode = jsonResponse["cod"] as? String, returnCode == "200" {
-                        completion(Forecast(dictionary: jsonResponse))
-                    } else {
-                        completion(nil)
-                    }
-
                 case .failure(let error):
                     print("Request failed with error: \(error)")
                     completion(nil)
                 }
-        }
+        })
     }
 }
