@@ -8,49 +8,70 @@
 
 import Foundation
 
-class Weather {
-    var temperature: Double = 0
-    var conditions: String = "Unknown"
-    var cityName: String = "Unknown"
-    var conditionCode: Int = 0
-    var date: Date?
+struct Coord: Codable {
+    var lon: Double
+    var lat: Double
+}
 
-    //Custom JSON parsing logic
-    init(dictionary: [String: Any]) {
-        if let rawDate = dictionary["dt"] as? Double {
-            date = Date(timeIntervalSince1970: rawDate)
-        }
+struct Weather: Codable {
+    var id: Int
+    var main: String
+    var description: String
+    var icon: String
+}
 
-        if let name = dictionary["name"] as? String {
-            cityName = name
-        } else {
-            cityName = "Unknown"
-        }
+struct Wind: Codable {
+    var speed: Double
+    var deg: Double
+}
 
-        if let mainDetails = dictionary["main"] as? [String: Any], let temp = mainDetails["temp"] as? Double {
-            temperature = temp
-        } else {
-            temperature = 0
-        }
+struct Clouds: Codable {
+    var all: Int
+}
 
-        if let weather = dictionary["weather"] as? [[String: Any]] {
-            if let description = weather[0]["main"] as? String {
-                conditions = description
-            }
+struct Main: Codable {
+    var temp: Double
+    var pressure: Double
+    var humidity: Double
+    var temp_min: Double
+    var temp_max: Double
+    var sea_level: Double?
+    var grnd_level: Double?
+}
+//
+//struct Rain: Codable {
+//    var oneHour: Double
+//    var threeHour: Double
+//
+//    enum CodingKeys: String, CodingKey {
+//        case oneHour = "1h"
+//        case threeHour = "3h"
+//    }
+//}
+//
+//struct Snow: Codable {
+//    var oneHour: Double
+//    var threeHour: Double
+//
+//    enum CodingKeys: String, CodingKey {
+//        case oneHour = "1h"
+//        case threeHour = "3h"
+//    }
+//}
 
-            if let code = weather[0]["id"] as? Int {
-                conditionCode = code
-            }
-        } else {
-            conditions = "Unknown"
-        }
-    }
-
-    init() {
-        temperature = 50
-        conditions = "Clear"
-        cityName = "Any Town"
-        conditionCode = 100
-        date = Date()
-    }
+struct WeatherResponse: Codable {
+    var coord: Coord
+    var weather: [Weather]
+    var base: String
+    var main: Main
+    var visibility: Double
+    var wind: Wind
+    var clouds: Clouds
+//    var rain: Rain?
+//    var snow: Snow?
+    var dt: Double
+    var timezone: Double
+    var id: Double
+    var name: String
+    var cod: Int
 }

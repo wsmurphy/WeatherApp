@@ -12,18 +12,18 @@ protocol CurrentWeatherViewModelDelegate {
 
 class CurrentWeatherViewModel {
     var delegate: CurrentWeatherViewModelDelegate?
-    var weather: Weather?
+    var weather: WeatherResponse?
 
     //Presentation variables
     var currentTempText: String {
-        if let temp = self.weather?.temperature {
+        if let temp = self.weather?.main.temp {
             return "\(temp)°"
         } else {
             return "- -°"
         }
     }
-    var currentConditionsText: String { return self.weather?.conditions ?? "Unknown" }
-    var currentCityText: String { return self.weather?.cityName ?? "Locating..." }
+    var currentConditionsText: String { return self.weather?.weather[0].description ?? "Unknown" }
+    var currentCityText: String { return self.weather?.name ?? "Locating..." }
 
     func getLatestWeather() {
         //Get latest Weather

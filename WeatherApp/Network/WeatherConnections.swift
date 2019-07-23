@@ -28,35 +28,34 @@ class WeatherConnections {
     fileprivate static let weatherAPIPart = "weather"
     fileprivate static let forecastAPIPart = "forecast"
 
-    static func loadWeather(zip: String, units: Units = Units.fahrenheit, completion: @escaping (Weather?) -> Void)  {
+    static func loadWeather(zip: String, units: Units = Units.fahrenheit, completion: @escaping (WeatherResponse?) -> Void)  {
         let parameterDictionary = ["appid": weatherAPIKey, "zip": zip + ",US", "units": units.rawValue]
         let url = baseAPIURL + "/" + weatherAPIPart
 
         //Get the weather conditions
         Alamofire.request(url, method: .get, parameters: parameterDictionary)
             .validate(contentType: ["application/json"])
-            .responseJSON { response in
+            .responseData(completionHandler: { (response) in
                 switch response.result {
-                case .success(let JSON):
+                case .success(let data):
+                    do {
+                        let weather = try JSONDecoder().decode(WeatherResponse.self, from: data)
 
-                    guard let jsonResponse = JSON as? [String: Any] else {
-                        print("Error parsing JSON")
-                        completion(nil)
-                        return
-                    }
-
-                    //Check for successful response
-                    if let returnCode = jsonResponse["cod"] as? Int, returnCode == 200 {
-                        completion(Weather(dictionary: jsonResponse))
-                    } else {
+                        //Check for successful response
+                        if weather.cod == 200 {
+                            completion(weather)
+                        } else {
+                            completion(nil)
+                        }
+                    } catch {
                         completion(nil)
                     }
 
                 case .failure(let error):
                     print("Request failed with error: \(error)")
                     completion(nil)
-                }
-        }
+            }
+        })
     }
 
     static func loadForecast(zip: String, units: Units = Units.fahrenheit, completion: @escaping (Forecast?) -> Void) {
