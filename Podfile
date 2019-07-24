@@ -10,12 +10,12 @@ target 'WeatherApp' do
   pod 'R.swift'
 
   target 'WeatherAppTests' do
-    inherit! :search_paths
+    inherit! :complete
     # Pods for testing
   end
 
   target 'WeatherAppUITests' do
-    inherit! :search_paths
+    inherit! :complete
     # Pods for testing
   end
 
