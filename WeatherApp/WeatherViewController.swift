@@ -44,7 +44,6 @@ class WeatherViewController: UIViewController {
         
         view.addSubview(stackView)
         
-        viewModel.loadWeather()
         bindView()
     }
     
@@ -54,8 +53,8 @@ class WeatherViewController: UIViewController {
             .sink { [weak self] response in
                 guard let self else { return }
                 if let response = response {
-                    self.tempLabel.text = "\(response.main.temp)°C"
-//                    self.conditionLabel.text = response.main.
+                    self.tempLabel.text = "\(response.main.temp)°F"
+                    self.conditionLabel.text = response.weather.first?.main
                 }
             }.store(in: &cancellables)
     }

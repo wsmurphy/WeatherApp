@@ -10,18 +10,20 @@ import Combine
 
 class WeatherViewModel {
     @Published var weather: WeatherResponse?
-    var location: String = "location"
+    var location: String = "Granite Quarry,NC,USA"
     
-    func loadWeather() {
-        WeatherService.shared.loadWeather(for: location) { result in
-            DispatchQueue.main.async {
-                switch result {
-                case .success(let weather):
-                    self.weather = weather
-                case .failure:
-                    break
-                }
-            }
+    init () {
+        Task {
+            await loadWeather()
+        }
+    }
+    
+    func loadWeather() async {
+        do {
+            let response = try await WeatherService.shared.loadWeather(for: location)
+            weather = response
+        } catch {
+            print(error.localizedDescription)
         }
     }
 }
