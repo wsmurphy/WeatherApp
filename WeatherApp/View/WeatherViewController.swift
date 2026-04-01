@@ -18,6 +18,7 @@ class WeatherViewController: UIViewController {
     private let contentStack = UIStackView()
 
     // MARK: - Cards
+    private let locationHeaderView = LocationHeaderView()
     private let currentWeatherView = CurrentWeatherView()
     private let forecastView = ForecastView()
     private let detailGrid = UIStackView()
@@ -30,10 +31,10 @@ class WeatherViewController: UIViewController {
         super.viewDidLoad()
 
         view.backgroundColor = .systemBackground
-        
 
         setupLocationDeniedLabel()
         setupScrollView()
+        setupLocationHeader()
         setupCurrentWeather()
         setupForecastView()
         setupDetailGrid()
@@ -74,21 +75,23 @@ class WeatherViewController: UIViewController {
         contentStack.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            // Scroll view fills the safe area
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
 
-            // Content stack drives scroll view's content size
-            contentStack.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor, constant: 20),
+            contentStack.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
             contentStack.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor, constant: 16),
             contentStack.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor, constant: -16),
             contentStack.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor, constant: -20),
 
-            // Keep content stack width locked to the scroll view's frame (vertical scroll only)
             contentStack.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor, constant: -32)
         ])
+    }
+
+    private func setupLocationHeader() {
+        locationHeaderView.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        contentStack.addArrangedSubview(locationHeaderView)
     }
 
     private func setupCurrentWeather() {
@@ -122,6 +125,12 @@ class WeatherViewController: UIViewController {
     // MARK: - Bind
 
     private func bindView() {
+        viewModel.$cityName
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] name in
+                self?.locationHeaderView.cityName = name
+            }.store(in: &cancellables)
+
         viewModel.$weather
             .receive(on: DispatchQueue.main)
             .sink { [weak self] response in

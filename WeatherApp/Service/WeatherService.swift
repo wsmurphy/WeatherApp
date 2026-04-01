@@ -11,67 +11,89 @@ import CoreLocation
 protocol WeatherServicing {
     func loadWeather(for coordinate: CLLocationCoordinate2D) async throws -> WeatherResponse
     func loadForecast(for coordinate: CLLocationCoordinate2D) async throws -> Forecast
+    func loadCityName(for coordinate: CLLocationCoordinate2D) async throws -> String
 }
 
 enum NetworkError: LocalizedError {
     case invalidURL
     case networkError
     case decodingError
+    case emptyResponse
 }
 
 class WeatherService: WeatherServicing {
     static let shared = WeatherService()
-    
+
     fileprivate static let weatherAPIKey = "b4608d4fcb4accac0a8cc2ea6949eeb5"
     fileprivate static let baseAPIURL = "https://api.openweathermap.org/data/2.5/"
+    fileprivate static let geoAPIURL = "https://api.openweathermap.org/geo/1.0/"
     fileprivate static let weatherAPIPart = "weather"
     fileprivate static let forecastAPIPart = "forecast/daily"
-    
+    fileprivate static let reverseGeoAPIPart = "reverse"
+
     func loadWeather(for coordinate: CLLocationCoordinate2D) async throws -> WeatherResponse {
         guard var url = URL(string: WeatherService.baseAPIURL.appending(WeatherService.weatherAPIPart)) else {
             throw NetworkError.invalidURL
         }
-        url.append(queryItems: [URLQueryItem(name: "lat", value: String(coordinate.latitude)),
-                                URLQueryItem(name: "lon", value: String(coordinate.longitude)),
-                                URLQueryItem(name: "appid", value: WeatherService.weatherAPIKey),
-                                URLQueryItem(name: "units", value: "imperial")])
-        let request = URLRequest(url: url)
-        let (data, response) = try await URLSession.shared.data(for: request)
-        
+        url.append(queryItems: [
+            URLQueryItem(name: "lat", value: String(coordinate.latitude)),
+            URLQueryItem(name: "lon", value: String(coordinate.longitude)),
+            URLQueryItem(name: "appid", value: WeatherService.weatherAPIKey),
+            URLQueryItem(name: "units", value: "imperial")
+        ])
+        let (data, response) = try await URLSession.shared.data(for: URLRequest(url: url))
         guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
             throw NetworkError.networkError
         }
-        
         do {
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
-            let weatherResponse = try decoder.decode(WeatherResponse.self, from: data)
-            return weatherResponse
+            return try decoder.decode(WeatherResponse.self, from: data)
         } catch {
             throw NetworkError.decodingError
         }
     }
-    
+
     func loadForecast(for coordinate: CLLocationCoordinate2D) async throws -> Forecast {
         guard var url = URL(string: WeatherService.baseAPIURL.appending(WeatherService.forecastAPIPart)) else {
             throw NetworkError.invalidURL
         }
-        url.append(queryItems: [URLQueryItem(name: "lat", value: String(coordinate.latitude)),
-                                URLQueryItem(name: "lon", value: String(coordinate.longitude)),
-                                URLQueryItem(name: "appid", value: WeatherService.weatherAPIKey),
-                                URLQueryItem(name: "units", value: "imperial"),
-                                URLQueryItem(name: "cnt", value: "7")])
-        
-        let request = URLRequest(url: url)
-        let (data, response) = try await URLSession.shared.data(for: request)
-        
+        url.append(queryItems: [
+            URLQueryItem(name: "lat", value: String(coordinate.latitude)),
+            URLQueryItem(name: "lon", value: String(coordinate.longitude)),
+            URLQueryItem(name: "appid", value: WeatherService.weatherAPIKey),
+            URLQueryItem(name: "units", value: "imperial"),
+            URLQueryItem(name: "cnt", value: "7")
+        ])
+        let (data, response) = try await URLSession.shared.data(for: URLRequest(url: url))
         guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
             throw NetworkError.networkError
         }
-        
         do {
-            let forecast = try JSONDecoder().decode(Forecast.self, from: data)
-            return forecast
+            return try JSONDecoder().decode(Forecast.self, from: data)
+        } catch {
+            throw NetworkError.decodingError
+        }
+    }
+
+    func loadCityName(for coordinate: CLLocationCoordinate2D) async throws -> String {
+        guard var url = URL(string: WeatherService.geoAPIURL.appending(WeatherService.reverseGeoAPIPart)) else {
+            throw NetworkError.invalidURL
+        }
+        url.append(queryItems: [
+            URLQueryItem(name: "lat", value: String(coordinate.latitude)),
+            URLQueryItem(name: "lon", value: String(coordinate.longitude)),
+            URLQueryItem(name: "limit", value: "1"),
+            URLQueryItem(name: "appid", value: WeatherService.weatherAPIKey)
+        ])
+        let (data, response) = try await URLSession.shared.data(for: URLRequest(url: url))
+        guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
+            throw NetworkError.networkError
+        }
+        do {
+            let results = try JSONDecoder().decode([GeocodingResult].self, from: data)
+            guard let first = results.first else { throw NetworkError.emptyResponse }
+            return first.name
         } catch {
             throw NetworkError.decodingError
         }
