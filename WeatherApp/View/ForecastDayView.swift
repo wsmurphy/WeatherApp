@@ -12,29 +12,18 @@ class ForecastDayView: UIStackView {
     let tempLabel = UILabel()
     let conditionsLabel = UILabel()
     let precipitationLabel = UILabel()
-    
-    let topRow = UIStackView()
-    let bottomRow = UIStackView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        axis = .vertical
+        
+        axis = .horizontal
         spacing = 10
-        
-        topRow.axis = .horizontal
-        topRow.spacing = 20
+        distribution = .fillEqually
         tempLabel.textAlignment = .right
-        topRow.addArrangedSubview(dateLabel)
-        topRow.addArrangedSubview(tempLabel)
-        
-        bottomRow.axis = .horizontal
-        bottomRow.spacing = 20
-        precipitationLabel.textAlignment = .right
-        bottomRow.addArrangedSubview(conditionsLabel)
-        bottomRow.addArrangedSubview(precipitationLabel)
-        
-        addArrangedSubview(topRow)
-        addArrangedSubview(bottomRow)
+        conditionsLabel.textAlignment = .center
+        addArrangedSubview(dateLabel)
+        addArrangedSubview(conditionsLabel)
+        addArrangedSubview(tempLabel)
     }
 
     required init(coder: NSCoder) { fatalError() }
@@ -49,13 +38,25 @@ class ForecastDayView: UIStackView {
         let formatter = DateFormatter()
         formatter.dateFormat = "EEEE"
         dateLabel.text = formatter.string(from: date)
+        dateLabel.font = .systemFont(ofSize: 14, weight: .semibold)
         tempLabel.text = "H: \(Int(day.temperature.max))° L: \(Int(day.temperature.min))°"
-        conditionsLabel.text = "\(day.weather.first?.main ?? "Unknown")"
 
-        let numberFormatter = NumberFormatter()
-        numberFormatter.maximumFractionDigits = 0
-        numberFormatter.multiplier = 100
-        let precipChance = numberFormatter.string(from: day.precipChance as NSNumber) ?? ""
-        precipitationLabel.text = "Chance of rain: \(precipChance)%"
+        guard let conditions = day.weather.first?.main else {
+            conditionsLabel.text = ""
+            return
+        }
+        
+        if day.precipChance > 0 && conditions == "Rain" {
+            let numberFormatter = NumberFormatter()
+            numberFormatter.maximumFractionDigits = 0
+            numberFormatter.multiplier = 100
+            let precipChance = numberFormatter.string(from: day.precipChance as NSNumber) ?? ""
+            conditionsLabel.text = "\(conditions) \(precipChance)%"
+        } else {
+            conditionsLabel.text = "\(conditions)"
+        }
+
+
+        
     }
 }

@@ -10,20 +10,40 @@ import Combine
 
 class WeatherViewController: UIViewController {
     private let viewModel = WeatherViewModel()
-    
-    private let stackView = UIStackView()
-    private var tempLabel = UILabel()
-    private var conditionLabel = UILabel()
-    private var locationDeniedLabel = UILabel()
-    private var forecastStack = UIStackView()
-    
+
+    private let locationDeniedLabel = UILabel()
+
+    // MARK: - Scroll
+    private let scrollView = UIScrollView()
+    private let contentStack = UIStackView()
+
+    // MARK: - Cards
+    private let currentWeatherView = CurrentWeatherView()
+    private let forecastView = ForecastView()
+    private let detailGrid = UIStackView()
+    private let humidityView = WeatherDetailView(title: "HUMIDITY")
+    private let windView = WeatherDetailView(title: "WIND")
+
     private var cancellables = Set<AnyCancellable>()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         view.backgroundColor = .systemBackground
         
+
+        setupLocationDeniedLabel()
+        setupScrollView()
+        setupCurrentWeather()
+        setupForecastView()
+        setupDetailGrid()
+
+        bindView()
+    }
+
+    // MARK: - Layout Setup
+
+    private func setupLocationDeniedLabel() {
         locationDeniedLabel.text = "Location access is required to show weather. Please enable it in Settings."
         locationDeniedLabel.font = .systemFont(ofSize: 16)
         locationDeniedLabel.textAlignment = .center
@@ -31,76 +51,114 @@ class WeatherViewController: UIViewController {
         locationDeniedLabel.lineBreakMode = .byWordWrapping
         locationDeniedLabel.textColor = .secondaryLabel
         locationDeniedLabel.isHidden = true
-        stackView.addArrangedSubview(locationDeniedLabel)
 
-        tempLabel.text = "Loading..."
-        tempLabel.font = .systemFont(ofSize: 50, weight: .bold)
-        tempLabel.textAlignment = .center
-        stackView.addArrangedSubview(tempLabel)
-        
-        conditionLabel.text = "Loading..."
-        conditionLabel.font = .systemFont(ofSize: 24, weight: .bold)
-        conditionLabel.textAlignment = .center
-        stackView.addArrangedSubview(conditionLabel)
-        stackView.axis = .vertical
-        stackView.spacing = 20
-        
-        forecastStack.axis = .vertical
-        forecastStack.spacing = 20
-        
-        view.addSubview(stackView)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(locationDeniedLabel)
+        locationDeniedLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            stackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            stackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            tempLabel.centerXAnchor.constraint(equalTo: stackView.centerXAnchor),
-            conditionLabel.centerXAnchor.constraint(equalTo: stackView.centerXAnchor)])
-        
-        view.addSubview(forecastStack)
-        forecastStack.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            forecastStack.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 20),
-            forecastStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            forecastStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+            locationDeniedLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            locationDeniedLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            locationDeniedLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
-        
-        bindView()
     }
-    
+
+    private func setupScrollView() {
+        scrollView.alwaysBounceVertical = true
+
+        contentStack.axis = .vertical
+        contentStack.spacing = 16
+
+        scrollView.addSubview(contentStack)
+        view.addSubview(scrollView)
+
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        contentStack.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            // Scroll view fills the safe area
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            // Content stack drives scroll view's content size
+            contentStack.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor, constant: 20),
+            contentStack.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor, constant: 16),
+            contentStack.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor, constant: -16),
+            contentStack.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor, constant: -20),
+
+            // Keep content stack width locked to the scroll view's frame (vertical scroll only)
+            contentStack.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor, constant: -32)
+        ])
+    }
+
+    private func setupCurrentWeather() {
+        currentWeatherView.temperature = "Loading..."
+        currentWeatherView.condition = "Loading..."
+        currentWeatherView.heightAnchor.constraint(equalToConstant: 140).isActive = true
+        contentStack.addArrangedSubview(currentWeatherView)
+    }
+
+    private func setupForecastView() {
+        contentStack.addArrangedSubview(forecastView)
+    }
+
+    private func setupDetailGrid() {
+        detailGrid.axis = .horizontal
+        detailGrid.spacing = 12
+        detailGrid.distribution = .fillEqually
+
+        for tile in [humidityView, windView] {
+            tile.backgroundColor = .secondarySystemBackground
+            tile.layer.cornerRadius = 12
+            tile.layer.masksToBounds = true
+            tile.heightAnchor.constraint(equalToConstant: 90).isActive = true
+        }
+
+        detailGrid.addArrangedSubview(humidityView)
+        detailGrid.addArrangedSubview(windView)
+        contentStack.addArrangedSubview(detailGrid)
+    }
+
+    // MARK: - Bind
+
     private func bindView() {
         viewModel.$weather
             .receive(on: DispatchQueue.main)
             .sink { [weak self] response in
                 guard let self = self, let response = response else { return }
-                
-                self.tempLabel.text = "\(response.main.temp)°F"
-                self.conditionLabel.text = response.weather.first?.main
+
+                self.currentWeatherView.temperature = "\(response.main.temp)°F"
+                self.currentWeatherView.condition = response.weather.first?.main
+
+                self.humidityView.value = "\(Int(response.main.humidity))%"
+
+                let speed = Int(response.wind.speed)
+                let direction = Self.compassDirection(from: response.wind.degrees)
+                self.windView.value = "\(speed) mph \(direction)"
             }.store(in: &cancellables)
-        
+
         viewModel.$locationDenied
             .receive(on: DispatchQueue.main)
             .sink { [weak self] denied in
                 guard let self else { return }
                 self.locationDeniedLabel.isHidden = !denied
-                self.conditionLabel.isHidden = denied
-                self.tempLabel.isHidden = denied
-                self.forecastStack.isHidden = denied
+                self.scrollView.isHidden = denied
             }.store(in: &cancellables)
 
         viewModel.$forecast
             .receive(on: DispatchQueue.main)
             .sink { [weak self] forecast in
                 guard let self = self, let forecast = forecast else { return }
-
-                self.forecastStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
-
-                for forecastDay in forecast.list {
-                    let dayView = ForecastDayView()
-                    dayView.day = forecastDay
-                    self.forecastStack.addArrangedSubview(dayView)
-                }
+                self.forecastView.setForecast(forecast.list)
             }.store(in: &cancellables)
+    }
+
+    // MARK: - Helpers
+
+    private static func compassDirection(from degrees: Double) -> String {
+        let directions = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE",
+                          "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
+        let index = Int((degrees + 11.25) / 22.5) % 16
+        return directions[index]
     }
 }

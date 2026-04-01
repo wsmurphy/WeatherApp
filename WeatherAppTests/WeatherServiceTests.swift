@@ -10,11 +10,11 @@ import CoreLocation
 @testable import WeatherApp
 
 class WeatherServiceTests: XCTestCase {
-    var service: WeatherService!
+    var service: OpenWeatherMapService!
     
     override func setUp() {
         super.setUp()
-        service = WeatherService()
+        service = OpenWeatherMapService()
     }
     
     override func tearDown() {
