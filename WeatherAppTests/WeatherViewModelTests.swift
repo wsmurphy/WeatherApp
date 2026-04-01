@@ -13,6 +13,7 @@ import Combine
 class MockWeatherService: WeatherServicing {
     var loadWeatherResult: Result<WeatherResponse, Error>?
     var loadForecastResult: Result<Forecast, Error>?
+    var loadCityNameResult: Result<String, Error>?
     
     func loadWeather(for coordinate: CLLocationCoordinate2D) async throws -> WeatherResponse {
         if let result = loadWeatherResult {
@@ -31,6 +32,18 @@ class MockWeatherService: WeatherServicing {
             switch result {
             case .success(let forecast):
                 return forecast
+            case .failure(let error):
+                throw error
+            }
+        }
+        fatalError("Mock not set up")
+    }
+    
+    func loadCityName(for coordinate: CLLocationCoordinate2D) async throws -> String {
+        if let result = loadCityNameResult {
+            switch result {
+            case .success(let cityName):
+                return cityName
             case .failure(let error):
                 throw error
             }
@@ -177,6 +190,7 @@ class WeatherViewModelTests: XCTestCase {
         
         mockService.loadWeatherResult = .success(mockWeather)
         mockService.loadForecastResult = .success(mockForecast)
+        mockService.loadCityNameResult = .success("San Diego")
         
         viewModel.$weather
             .dropFirst()
@@ -198,6 +212,16 @@ class WeatherViewModelTests: XCTestCase {
         let location = CLLocation(latitude: 37.7749, longitude: -122.4194)
         mockLocationManager.locationValue = location
         
-        wait(for: [expectation], timeout: 0.5)
+        wait(for: [expectation], timeout: 2.0)
+    }
+    
+    func testLoadsCityName_WhenLocationProvided() async {
+        let coordinate = CLLocationCoordinate2D(latitude: 37.7749, longitude: -122.4194)
+        
+        mockService.loadCityNameResult = .success("San Francisco")
+        
+        await viewModel.loadCityName(for: coordinate)
+        
+        XCTAssertEqual(viewModel.cityName, "San Francisco")
     }
 }

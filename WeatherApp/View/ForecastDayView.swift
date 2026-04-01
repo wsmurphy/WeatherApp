@@ -11,7 +11,6 @@ class ForecastDayView: UIStackView {
     let dateLabel = UILabel()
     let tempLabel = UILabel()
     let conditionsLabel = UILabel()
-    let precipitationLabel = UILabel()
 
     override init(frame: CGRect) {
         super.init(frame: frame)

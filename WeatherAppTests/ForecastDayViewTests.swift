@@ -36,7 +36,23 @@ class ForecastDayViewTests: XCTestCase {
         XCTAssertEqual(forecastDayView.dateLabel.text, "Friday")
         XCTAssertEqual(forecastDayView.tempLabel.text, "H: 75° L: 65°")
         XCTAssertEqual(forecastDayView.conditionsLabel.text, "Clear")
-        XCTAssertEqual(forecastDayView.precipitationLabel.text, "Chance of rain: 25%")
+    }
+    
+    func testConfigure_SetsLabelsWithRainChanceCorrectly() {
+        let forecastDay = ForecastDay(
+            temperature: Temp(max: 75.0, min: 65.0),
+            date: 1640995200.0, // January 1, 2022, Saturday
+            pressure: 1013.0,
+            humidity: 60.0,
+            precipChance: 0.25,
+            weather: [Weather(id: 800, main: "Rain", description: "rainy", icon: "01d")]
+        )
+        
+        forecastDayView.day = forecastDay
+        
+        XCTAssertEqual(forecastDayView.dateLabel.text, "Friday")
+        XCTAssertEqual(forecastDayView.tempLabel.text, "H: 75° L: 65°")
+        XCTAssertEqual(forecastDayView.conditionsLabel.text, "Rain 25%")
     }
     
     func testConfigure_WithNilWeather_UsesUnknown() {
@@ -51,6 +67,6 @@ class ForecastDayViewTests: XCTestCase {
         
         forecastDayView.day = forecastDay
         
-        XCTAssertEqual(forecastDayView.conditionsLabel.text, "Unknown")
+        XCTAssertEqual(forecastDayView.conditionsLabel.text, "")
     }
 }

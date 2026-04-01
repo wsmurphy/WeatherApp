@@ -23,8 +23,7 @@ enum NetworkError: LocalizedError {
 
 class WeatherService: WeatherServicing {
     static let shared = WeatherService()
-
-    fileprivate static let weatherAPIKey = "b4608d4fcb4accac0a8cc2ea6949eeb5"
+    
     fileprivate static let baseAPIURL = "https://api.openweathermap.org/data/2.5/"
     fileprivate static let geoAPIURL = "https://api.openweathermap.org/geo/1.0/"
     fileprivate static let weatherAPIPart = "weather"
@@ -35,10 +34,11 @@ class WeatherService: WeatherServicing {
         guard var url = URL(string: WeatherService.baseAPIURL.appending(WeatherService.weatherAPIPart)) else {
             throw NetworkError.invalidURL
         }
+        
         url.append(queryItems: [
             URLQueryItem(name: "lat", value: String(coordinate.latitude)),
             URLQueryItem(name: "lon", value: String(coordinate.longitude)),
-            URLQueryItem(name: "appid", value: WeatherService.weatherAPIKey),
+            URLQueryItem(name: "appid", value: getAPIKey()),
             URLQueryItem(name: "units", value: "imperial")
         ])
         let (data, response) = try await URLSession.shared.data(for: URLRequest(url: url))
@@ -58,10 +58,11 @@ class WeatherService: WeatherServicing {
         guard var url = URL(string: WeatherService.baseAPIURL.appending(WeatherService.forecastAPIPart)) else {
             throw NetworkError.invalidURL
         }
+        
         url.append(queryItems: [
             URLQueryItem(name: "lat", value: String(coordinate.latitude)),
             URLQueryItem(name: "lon", value: String(coordinate.longitude)),
-            URLQueryItem(name: "appid", value: WeatherService.weatherAPIKey),
+            URLQueryItem(name: "appid", value: getAPIKey()),
             URLQueryItem(name: "units", value: "imperial"),
             URLQueryItem(name: "cnt", value: "7")
         ])
@@ -80,11 +81,12 @@ class WeatherService: WeatherServicing {
         guard var url = URL(string: WeatherService.geoAPIURL.appending(WeatherService.reverseGeoAPIPart)) else {
             throw NetworkError.invalidURL
         }
+        
         url.append(queryItems: [
             URLQueryItem(name: "lat", value: String(coordinate.latitude)),
             URLQueryItem(name: "lon", value: String(coordinate.longitude)),
             URLQueryItem(name: "limit", value: "1"),
-            URLQueryItem(name: "appid", value: WeatherService.weatherAPIKey)
+            URLQueryItem(name: "appid", value: getAPIKey())
         ])
         let (data, response) = try await URLSession.shared.data(for: URLRequest(url: url))
         guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
@@ -97,5 +99,15 @@ class WeatherService: WeatherServicing {
         } catch {
             throw NetworkError.decodingError
         }
+    }
+    
+    private func getAPIKey() -> String {
+        guard let path = Bundle.main.path(forResource: "Keys", ofType: "plist"),
+              let dict = NSDictionary(contentsOfFile: path),
+            let apiKey = dict["OpenWeatherMapAPIKey"] as? String else {
+            return ""
+        }
+        
+        return apiKey
     }
 }
