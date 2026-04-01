@@ -14,14 +14,15 @@ class WeatherViewModel {
     @Published var forecast: Forecast?
     @Published var locationDenied: Bool = false
 
-    private let locationManager = LocationManager()
+    private let locationManager: LocationManaging
     private var cancellables = Set<AnyCancellable>()
     private let service: WeatherServicing
 
-    init(service: WeatherServicing = WeatherService.shared) {
+    init(service: WeatherServicing = WeatherService.shared, locationManager: LocationManaging = LocationManager()) {
         self.service = service
+        self.locationManager = locationManager
         
-        locationManager.$locationDenied
+        locationManager.locationDenied
             .filter { $0 }
             .receive(on: DispatchQueue.main)
             .sink { [weak self] denied in
@@ -29,7 +30,7 @@ class WeatherViewModel {
             }
             .store(in: &cancellables)
 
-        locationManager.$location
+        locationManager.location
             .compactMap { $0 }
             .first()
             .sink { [weak self] location in
@@ -42,7 +43,7 @@ class WeatherViewModel {
             .store(in: &cancellables)
     }
 
-    private func loadConditions(for coordinate: CLLocationCoordinate2D) async {
+    internal func loadConditions(for coordinate: CLLocationCoordinate2D) async {
         do {
             let response = try await service.loadWeather(for: coordinate)
             await MainActor.run { weather = response }
@@ -51,7 +52,7 @@ class WeatherViewModel {
         }
     }
 
-    private func loadForecast(for coordinate: CLLocationCoordinate2D) async {
+    internal func loadForecast(for coordinate: CLLocationCoordinate2D) async {
         do {
             let response = try await service.loadForecast(for: coordinate)
             await MainActor.run { forecast = response }

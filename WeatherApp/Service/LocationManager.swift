@@ -8,9 +8,17 @@
 import CoreLocation
 import Combine
 
-class LocationManager: NSObject, CLLocationManagerDelegate {
-    @Published var location: CLLocation?
-    @Published var locationDenied: Bool = false
+protocol LocationManaging {
+    var location: Published<CLLocation?>.Publisher { get }
+    var locationDenied: Published<Bool>.Publisher { get }
+}
+
+class LocationManager: NSObject, CLLocationManagerDelegate, LocationManaging {
+    @Published private(set) var locationValue: CLLocation?
+    @Published private(set) var locationDeniedValue: Bool = false
+
+    var location: Published<CLLocation?>.Publisher { $locationValue }
+    var locationDenied: Published<Bool>.Publisher { $locationDeniedValue }
 
     private let manager = CLLocationManager()
 
@@ -28,7 +36,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         case .authorizedWhenInUse, .authorizedAlways:
             manager.requestLocation()
         case .denied, .restricted:
-            locationDenied = true
+            locationDeniedValue = true
         case .notDetermined:
             break
         @unknown default:
@@ -37,11 +45,10 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        location = locations.last
+        locationValue = locations.last
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Location error:", error.localizedDescription)
-        locationDenied = true
     }
 }
