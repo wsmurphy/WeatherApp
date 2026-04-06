@@ -137,7 +137,7 @@ class WeatherViewController: UIViewController {
                 guard let self = self, let response = response else { return }
 
                 self.currentWeatherView.temperature = "\(response.main.temp)°F"
-                self.currentWeatherView.condition = response.weather.first?.main
+                self.currentWeatherView.condition = response.weather.first?.main ?? "Unknown"
 
                 self.humidityView.value = "\(Int(response.main.humidity))%"
 
