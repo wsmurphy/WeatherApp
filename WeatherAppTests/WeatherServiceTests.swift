@@ -35,6 +35,7 @@ class WeatherServiceTests: XCTestCase {
             "visibility": 10000,
             "wind": {"speed": 5.0, "deg": 180.0},
             "clouds": {"all": 0},
+            "sys": {"sunrise": 1640970000, "sunset": 1641006000},
             "dt": 1640995200,
             "timezone": -28800,
             "id": 5391959,
@@ -51,6 +52,8 @@ class WeatherServiceTests: XCTestCase {
         XCTAssertEqual(response.coord.longitude, -122.4194)
         XCTAssertEqual(response.weather.first?.main, "Clear")
         XCTAssertEqual(response.main.temp, 72.0)
+        XCTAssertEqual(response.sys?.sunrise, 1640970000)
+        XCTAssertEqual(response.sys?.sunset, 1641006000)
     }
     
     func testForecastDecoding() throws {

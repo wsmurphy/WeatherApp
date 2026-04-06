@@ -113,7 +113,8 @@ class WeatherViewModelTests: XCTestCase {
             dt: 1640995200.0,
             timezone: -28800.0,
             id: 5391959.0,
-            name: "San Francisco"
+            name: "San Francisco",
+            sys: SunCycle(sunrise: 1640970000.0, sunset: 1641006000.0)
         )
         
         mockService.loadWeatherResult = .success(mockWeather)
@@ -172,7 +173,8 @@ class WeatherViewModelTests: XCTestCase {
             dt: 1640995200.0,
             timezone: -28800.0,
             id: 5391959.0,
-            name: "San Francisco"
+            name: "San Francisco",
+            sys: SunCycle(sunrise: 1640970000.0, sunset: 1641006000.0)
         )
         
         let mockForecast = Forecast(

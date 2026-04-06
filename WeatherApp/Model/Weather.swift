@@ -46,6 +46,11 @@ struct Main: Codable {
     let grndLevel: Double?
 }
 
+struct SunCycle: Codable {
+    let sunrise: Double
+    let sunset: Double
+}
+
 struct WeatherResponse: Codable {
     let coord: Coordinates
     let weather: [Weather]
@@ -58,4 +63,5 @@ struct WeatherResponse: Codable {
     let timezone: Double
     let id: Double
     let name: String
+    let sys: SunCycle?
 }
