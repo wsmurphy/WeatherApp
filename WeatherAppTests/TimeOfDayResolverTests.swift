@@ -48,7 +48,7 @@ final class TimeOfDayResolverTests: XCTestCase {
     }
 
     func testResolve_MissingSunTimes_UsesLocalHourFallback() {
-        let now = Date(timeIntervalSince1970: 1_700_000_000)
+        let now = Date(timeIntervalSince1970: 1_800_000_000)
         let result = TimeOfDayResolver.resolve(now: now, sunrise: nil, sunset: nil, timezoneOffset: 0)
 
         XCTAssertEqual(result, .night)

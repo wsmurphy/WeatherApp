@@ -118,6 +118,7 @@ class WeatherViewController: UIViewController {
     private func setupCurrentWeather() {
         currentWeatherView.temperature = "Loading..."
         currentWeatherView.condition = "Loading..."
+        currentWeatherView.conditionIconCode = nil
         currentWeatherView.heightAnchor.constraint(equalToConstant: 140).isActive = true
         contentStack.addArrangedSubview(currentWeatherView)
     }
@@ -157,8 +158,10 @@ class WeatherViewController: UIViewController {
                 guard let self = self, let response = response else { return }
 
                 self.updateBackgroundTheme(using: response)
+                let primaryCondition = response.weather.first
                 self.currentWeatherView.temperature = "\(response.main.temp)°F"
-                self.currentWeatherView.condition = response.weather.first?.main ?? "Unknown"
+                self.currentWeatherView.condition = primaryCondition?.main ?? "Unknown"
+                self.currentWeatherView.conditionIconCode = primaryCondition?.icon
 
                 self.humidityView.value = "\(Int(response.main.humidity))%"
 

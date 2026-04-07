@@ -10,7 +10,8 @@ import UIKit
 class LocationHeaderView: UIView {
 
     // MARK: - Subviews
-
+    private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterial))
+    private let tintView = UIView()
     private let iconView = UIImageView()
     private let cityLabel = UILabel()
 
@@ -26,9 +27,11 @@ class LocationHeaderView: UIView {
     // MARK: - Setup
 
     private func setup() {
-        backgroundColor = .secondarySystemBackground
+        setupGlassBackground()
         layer.cornerRadius = 12
         layer.masksToBounds = true
+        layer.borderWidth = 1
+        layer.borderColor = UIColor.white.withAlphaComponent(0.24).cgColor
 
         iconView.image = UIImage(systemName: "location.fill")
         iconView.tintColor = .secondaryLabel
@@ -55,6 +58,30 @@ class LocationHeaderView: UIView {
             stack.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -16),
             stack.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: 12),
             stack.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -12)
+        ])
+    }
+    
+    private func setupGlassBackground() {
+        backgroundColor = .clear
+        blurView.translatesAutoresizingMaskIntoConstraints = false
+        blurView.isUserInteractionEnabled = false
+        addSubview(blurView)
+
+        tintView.backgroundColor = UIColor.white.withAlphaComponent(0.10)
+        tintView.translatesAutoresizingMaskIntoConstraints = false
+        tintView.isUserInteractionEnabled = false
+        blurView.contentView.addSubview(tintView)
+
+        NSLayoutConstraint.activate([
+            blurView.topAnchor.constraint(equalTo: topAnchor),
+            blurView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            blurView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            blurView.bottomAnchor.constraint(equalTo: bottomAnchor),
+
+            tintView.topAnchor.constraint(equalTo: blurView.contentView.topAnchor),
+            tintView.leadingAnchor.constraint(equalTo: blurView.contentView.leadingAnchor),
+            tintView.trailingAnchor.constraint(equalTo: blurView.contentView.trailingAnchor),
+            tintView.bottomAnchor.constraint(equalTo: blurView.contentView.bottomAnchor)
         ])
     }
 
