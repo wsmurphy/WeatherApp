@@ -29,3 +29,5 @@ DerivedData
 #AppCode
 .idea/
 
+#Keys file
+WeatherApp/Keys.plist

@@ -2,25 +2,32 @@
 //  Forecast.swift
 //  WeatherApp
 //
-//  Created by Murphy, Stephen - William S on 7/19/19.
-//  Copyright © 2019 Murphy. All rights reserved.
+//  Created by Stephen Murphy on 3/28/26.
 //
 
-import Foundation
-
 struct ForecastDay: Codable {
-    var temp: Temp
-    var dt: Double
-    var pressure: Double
-    var humidity: Double
+    let temperature: Temp
+    let date: Double
+    let pressure: Double
+    let humidity: Double
+    let precipChance: Double
+    let weather: [Weather]
+    
+    enum CodingKeys: String, CodingKey {
+        case temperature = "temp"
+        case date = "dt"
+        case pressure
+        case humidity
+        case precipChance = "pop"
+        case weather
+    }
 }
 
 struct Temp: Codable {
-    var max: Double
-    var min: Double
+    let max: Double
+    let min: Double
 }
 
 struct Forecast: Codable {
-    var list: [ForecastDay]
-    var cod: String
+    let list: [ForecastDay]
 }
